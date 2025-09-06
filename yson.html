@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yesterday's Son - Pitch Deck</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
+    <style>
+        :root {
+            --trek-blue: #0066cc;
+            --trek-red: #cc0000;
+            --trek-gold: #ffcc00;
+            --trek-silver: #c0c0c0;
+            --dark-bg: #0a0a0a;
+            --dark-card: #1a1a1a;
+            --text-muted: #adb5bd;
+        }
+        
+        body {
+            background: #000000;
+            color: #ffffff !important;
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Audiowide", sans-serif;
+            font-weight: 800;
+        }
+        
+        /* Starfield canvas - covers entire viewport */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: #000000;
+        }
+
+        /* Content wrapper */
+        #well {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            z-index: 1;
+        }
+                
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--trek-blue) !important;
+        }
+        
+        .section {
+            padding: 4rem 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.1), rgba(204, 0, 0, 0.1));
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--trek-blue), var(--trek-red), var(--trek-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 30px rgba(0, 102, 204, 0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-tagline {
+            font-size: 1.25rem;
+            color: var(--trek-gold);
+            font-style: italic;
+            margin-bottom: 3rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            color: #ffffff !important;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--trek-blue);
+            box-shadow: 0 10px 25px rgba(0, 102, 204, 0.2);
+        }
+        
+        .card-header {
+            background: rgba(0, 102, 204, 0.1);
+            border-bottom: 1px solid rgba(0, 102, 204, 0.3);
+            border-radius: 15px 15px 0 0 !important;
+        }
+        
+        .card-header h5 {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            font-family: 'Eurostyle', 'Arial Black', 'Arial', sans-serif !important;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--trek-blue);
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--trek-blue), var(--trek-gold));
+        }
+        
+        .logline-card {
+            background: rgba(0, 102, 204, 0.1);
+            border: 2px solid rgba(0, 102, 204, 0.3);
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+        
+        .character-card {
+            border-left: 4px solid var(--trek-gold);
+            background: rgba(255, 204, 0, 0.05);
+        }
+        
+        .character-name {
+            color: var(--trek-gold);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card {
+            text-align: center;
+            background: rgba(0, 102, 204, 0.1);
+            border: 1px solid rgba(0, 102, 204, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            color: var(--trek-gold);
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        .episode-card {
+            background: rgba(204, 0, 0, 0.05);
+            border-left: 3px solid var(--trek-red);
+            margin-bottom: 1rem;
+        }
+        
+        .episode-title {
+            color: var(--trek-red);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .theme-badge {
+            background: linear-gradient(45deg, rgba(0, 102, 204, 0.2), rgba(204, 0, 0, 0.2));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+        
+        .btn-trek {
+            background: linear-gradient(45deg, var(--trek-blue), var(--trek-red));
+            border: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-trek:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+            color: white;
+        }
+        
+        .list-group-item {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+        }
+        
+        .card-body, .card-body p, .card-body li {
+            color: #ffffff !important;
+        }
+        
+        .accordion-body, .accordion-body p {
+            color: #ffffff !important;
+        }
+        
+        .season-header {
+            background: rgba(204, 0, 0, 0.1);
+            color: var(--trek-red);
+            font-weight: bold;
+            border: 1px solid rgba(204, 0, 0, 0.3);
+        }
+        
+        .navigation-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+        }
+        
+        .nav-dot.active {
+            background: var(--trek-blue);
+            transform: scale(1.5);
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--trek-blue) !important;
+        }
+        
+        .accordion-button {
+            background: rgba(204, 0, 0, 0.1) !important;
+            color: var(--trek-red) !important;
+            font-weight: bold !important;
+            border: 1px solid rgba(204, 0, 0, 0.3) !important;
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background: rgba(204, 0, 0, 0.2) !important;
+            color: var(--trek-red) !important;
+        }
+        
+        .accordion-button:focus {
+            box-shadow: none;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .navigation-dots {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Starfield Canvas - Full Screen Background -->
+    <canvas id="starfield"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#hero">
+                <i class="fas fa-rocket me-2"></i>YESTERDAY'S SON
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#story">Story</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#characters">Characters</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#unique">What's Special</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#seasons">Seasons</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#themes">Themes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#market">Market</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#forward">Next Steps</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Navigation Dots -->
+    <div class="navigation-dots d-none d-lg-block">
+        <div class="nav-dot active" data-bs-target="#hero"></div>
+        <div class="nav-dot" data-bs-target="#story"></div>
+        <div class="nav-dot" data-bs-target="#characters"></div>
+        <div class="nav-dot" data-bs-target="#unique"></div>
+        <div class="nav-dot" data-bs-target="#seasons"></div>
+        <div class="nav-dot" data-bs-target="#themes"></div>
+        <div class="nav-dot" data-bs-target="#market"></div>
+        <div class="nav-dot" data-bs-target="#forward"></div>
+    </div>
+
+    <!-- Content Container -->
+    <div id="well">
+        <div class="container">
+            <!-- Hero Section -->
+            <section id="hero" class="section hero-section">
+                <div class="container">
+                    <h1 class="hero-title">YESTERDAY'S SON</h1>
+                    <p class="hero-subtitle">A Star Trek Limited Series</p>
+                    <p class="hero-tagline">"When the past holds the key to the future, a father must choose between love and destiny"</p>
+                    
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-2 col-4">
+                            <div class="card stat-card">
+                                <div class="card-body">
+                                    <div class="stat-number">3</div>
+                                    <div class="stat-label">Seasons</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-4">
+                            <div class="card stat-card">
+                                <div class="card-body">
+                                    <div class="stat-number">18</div>
+                                    <div class="stat-label">Episodes + Special</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-4">
+                            <div class="card stat-card">
+                                <div class="card-body">
+                                    <div class="stat-number">2</div>
+                                    <div class="stat-label">Universes</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Story Section -->
+            <section id="story" class="section">
+                <div class="container">
+                    <h2 class="section-title text-center">The Story</h2>
+                    
+                    <div class="row justify-content-center mb-5">
+                        <div class="col-lg-10">
+                            <div class="card logline-card">
+                                <div class="card-body p-4">
+                                    <p class="mb-0 text-center">
+                                        When archaeological evidence reveals the impossible existence of his son across two parallel universes, Spock must navigate temporal mysteries and prevent the Borg from assimilating Vulcan—while confronting the ultimate choice between fatherhood and the fate of his people.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>The Hook</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Ancient ruins bear the Enterprise insignia—impossible artifacts that shouldn't exist in any timeline. This discovery sends both Prime and Mirror Spock on parallel journeys to uncover the truth about Zar, the son he fathered with Zarabeth in Sarpeidon's past.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>The Stakes</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>The Borg threaten to assimilate Vulcan across multiple universes. Zar's unique temporal biology—locked to his original timeline—holds the key to developing anti-Borg technology and protecting countless worlds.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Characters Section -->
+            <section id="characters" class="section">
+                <div class="container">
+                    <h2 class="section-title text-center">Key Characters</h2>
+                    
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="card character-card h-100">
+                                <div class="card-body">
+                                    <div class="character-name">Spock (Prime & Mirror)</div>
+                                    <p>Two versions of the legendary Vulcan, each pursuing the mystery of their son through different motivations but toward the same destiny. Their parallel journeys explore duty, fatherhood, and sacrifice.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="card character-card h-100">
+                                <div class="card-body">
+                                    <div class="character-name">Zar</div>
+                                    <p>Spock's son with Zarabeth, possessing unique temporal-locked genetics that make him immune to Borg assimilation. His existence serves a greater purpose in protecting multiple timelines.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="card character-card h-100">
+                                <div class="card-body">
+                                    <div class="character-name">The Emergency Medical Hologram</div>
+                                    <p>A malfunctioning EMH prototype whose glitches accidentally reveal crucial information about temporal biology and future Borg threats, becoming an unlikely key to the mystery.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="card character-card h-100">
+                                <div class="card-body">
+                                    <div class="character-name">The Orion Resistance</div>
+                                    <p>A network operating as an underground railroad for temporal refugees, using their reputation as pirates and slavers as cover for their true mission of protection.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Unique Elements Section -->
+            <section id="unique" class="section">
+                <div class="container">
+                    <h2 class="section-title text-center">What Makes It Special</h2>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-globe fa-3x text-primary mb-3"></i>
+                                    <h5>Multi-Universe Storytelling</h5>
+                                    <p>Parallel narratives in Prime and Mirror universes create rich storytelling opportunities while exploring how different paths can lead to the same crucial destination.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                                    <h5>Temporal Mechanics</h5>
+                                    <p>Deep exploration of time travel consequences, temporal biology, and the Guardian of Forever's greater purpose in orchestrating events across timelines.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-heart fa-3x text-danger mb-3"></i>
+                                    <h5>Character-Driven Sci-Fi</h5>
+                                    <p>Combines high-concept temporal threats with intimate family drama, as Spock confronts fatherhood while saving civilizations.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-star fa-3x text-info mb-3"></i>
+                                    <h5>Fresh Trek Mythology</h5>
+                                    <p>Expands on classic TOS episodes while introducing new concepts like temporal antibodies, creating lasting additions to Star Trek lore.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seasons Section -->
+            <section id="seasons" class="section">
+                <div class="container">
+                    <h2 class="section-title text-center">Season Structure</h2>
+                    
+                    <div class="accordion" id="seasonsAccordion">
+                        <!-- Season 1 -->
+                        <div class="accordion-item bg-transparent border-0 mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#season1">
+                                    Season One: Discovery (6 Episodes)
+                                </button>
+                            </h2>
+                            <div id="season1" class="accordion-collapse collapse show" data-bs-parent="#seasonsAccordion">
+                                <div class="accordion-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="card episode-card">
+                                                <div class="card-body">
+                                                    <div class="episode-title">"Unreal"</div>
+                                                    <p class="mb-0">Archaeological discoveries lead both Spocks to the Guardian of Forever</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card episode-card">
+                                                <div class="card-body">
+                                                    <div class="episode-title">"Echoes of Yesterday"</div>
+                                                    <p class="mb-0">First journeys through time and EMH prototype activation</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card episode-card">
+                                                <div class="card-body">
+                                                    <div class="episode-title">"Blood and Time"</div>
+                                                    <p class="mb-0">EMH reveals Zar's unique biology; Orion resistance discovered</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card episode-card">
+                                                <div class="card-body">
+                                                    <div class="episode-title">"The Doctor's Dilemma"</div>
+                                                    <p class="mb-0">Zar's temporal lock revealed; first signs of Borg threat</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card episode-card">
+                                                <div class="card-body">
+                                                    <div class="episode-title">"Crossroads"</div>
+                                                    <p class="mb-0">Timeline investigations converge; EMH exposes Borg knowledge</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card episode-card">
+                                                <div class="card-body">
+                                                    <div class="episode-title">"Tomorrow's Shadow"</div>
+                                                    <p class="mb-0">Concrete evidence of Borg threat; Zar becomes key focus</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Season 2 -->
+                        <div class="accordion-item bg-transparent border-0 mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#season2">
+                                    Season Two: Convergence (6 Episodes)
+                                </button>
+                            </h2>
+                            <div id="season2" class="accordion-collapse collapse" data-bs-parent="#seasonsAccordion">
+                                <div class="accordion-body">
+                                    <p>McCoy delivers devastating news to Zar while both universes detect coordinated Borg attacks. The truth about Zarabeth's exile emerges as both Spocks prepare for difficult goodbyes. Key episodes include "Temporal Wounds," "The Resistance," "Mother's Keeper," "The Anchor," "Farewell's Edge," and "Yesterday's Promise."</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Season 3 -->
+                        <div class="accordion-item bg-transparent border-0">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#season3">
+                                    Season Three: Legacy (6 Episodes + Special)
+                                </button>
+                            </h2>
+                            <div id="season3" class="accordion-collapse collapse" data-bs-parent="#seasonsAccordion">
+                                <div class="accordion-body">
+                                    <p>Implementation of temporal defenses across universes, with the series finale showing the successful prevention of Borg incursion across multiple timelines. Special "Debrief" episode provides closure with both Spocks acknowledging their shared experience as fathers and protectors.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Themes Section -->
+            <section id="themes" class="section">
+                <div class="container">
+                    <h2 class="section-title text-center">Themes & Tone</h2>
+                    
+                    <div class="row g-4 mb-5">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-tags me-2"></i>Core Themes</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span class="badge theme-badge fs-6 py-2 px-3">Destiny vs Choice</span>
+                                        <span class="badge theme-badge fs-6 py-2 px-3">Sacrifice & Duty</span>
+                                        <span class="badge theme-badge fs-6 py-2 px-3">Family Bonds</span>
+                                        <span class="badge theme-badge fs-6 py-2 px-3">Time & Consequence</span>
+                                        <span class="badge theme-badge fs-6 py-2 px-3">Protection vs Control</span>
+                                        <span class="badge theme-badge fs-6 py-2 px-3">Legacy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-heart me-2"></i>Emotional Core</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>At its heart, this is a father-son story about love, loss, and the impossible choices we make to protect those we care about. The sci-fi elements serve the emotional journey.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-palette me-2"></i>Tone</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Combines the philosophical depth of classic Trek with modern storytelling techniques. Think "The Inner Light" meets "Yesterday's Enterprise"—intimate character moments within epic temporal stakes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Market Appeal Section -->
+            <section id="market" class="section">
+                <div class="container">
+                    <h2 class="section-title text-center">Market Appeal</h2>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-users me-2"></i>Target Audience</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Core Star Trek fanbase hungry for TOS-era content</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Sci-fi audiences who appreciate complex temporal narratives</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Viewers drawn to character-driven family dramas</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Fans of parallel universe storytelling</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-tv me-2"></i>Comparable Series</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><strong>Loki</strong> - Temporal mechanics and character development</li>
+                                        <li><strong>Dark</strong> - Complex time travel with family themes</li>
+                                        <li><strong>The Expanse</strong> - Hard sci-fi with political intrigue</li>
+                                        <li><strong>Strange New Worlds</strong> - Classic Trek feel with modern production</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-star me-2"></i>Franchise Value</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-plus text-primary me-2"></i>Expands TOS mythology while remaining accessible</li>
+                                        <li><i class="fas fa-plus text-primary me-2"></i>Creates new canonical elements for future Trek</li>
+                                        <li><i class="fas fa-plus text-primary me-2"></i>Potential for spin-offs exploring temporal resistance</li>
+                                        <li><i class="fas fa-plus text-primary me-2"></i>Strong merchandising opportunities</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Production Advantages</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-arrow-right text-info me-2"></i>Limited series format allows focused storytelling</li>
+                                        <li><i class="fas fa-arrow-right text-info me-2"></i>Established Trek universe reduces world-building costs</li>
+                                        <li><i class="fas fa-arrow-right text-info me-2"></i>Strong character concepts with built-in conflict</li>
+                                        <li><i class="fas fa-arrow-right text-info me-2"></i>Multiple timeline format offers production flexibility</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Moving Forward Section -->
+            <section id="forward" class="section">
+                <div class="container">
+                    <h2 class="section-title text-center">Moving Forward</h2>
+                    
+                    <div class="row justify-content-center mb-5">
+                        <div class="col-lg-10">
+                            <div class="card logline-card">
+                                <div class="card-body p-4">
+                                    <p class="mb-0 text-center">
+                                        "Yesterday's Son" offers a unique opportunity to explore untold Star Trek mythology while delivering a deeply emotional story about family, sacrifice, and the price of protecting the future.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-handshake me-2"></i>What We're Seeking</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Development partnership with streaming platform</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Executive producer with Trek experience</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Writing team familiar with temporal storytelling</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Production budget appropriate for premium sci-fi</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-road me-2"></i>Next Steps</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-arrow-right text-info me-2"></i>Detailed series bible expansion</li>
+                                        <li><i class="fas fa-arrow-right text-info me-2"></i>Pilot script development</li>
+                                        <li><i class="fas fa-arrow-right text-info me-2"></i>Casting discussions for key roles</li>
+                                        <li><i class="fas fa-arrow-right text-info me-2"></i>Production timeline and budget planning</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row justify-content-center mt-5">
+                        <div class="col-lg-8 text-center">
+                            <div class="card" style="background: rgba(255, 204, 0, 0.1); border-color: rgba(255, 204, 0, 0.3);">
+                                <div class="card-body p-4">
+                                    <h4 class="text-warning mb-3">Ready to explore how the past can save the future?</h4>
+                                    <button class="btn btn-trek btn-lg px-5">Contact Us</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navigation dots functionality
+        const navDots = document.querySelectorAll('.nav-dot');
+        navDots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                const target = this.getAttribute('data-bs-target');
+                const element = document.querySelector(target);
+                if (element) {
+                    element.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Update active navigation dot on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const navDots = document.querySelectorAll('.nav-dot');
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+            
+            sections.forEach((section, index) => {
+                const sectionTop = section.offsetTop;
+                const sectionBottom = sectionTop + section.offsetHeight;
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    navDots.forEach(dot => dot.classList.remove('active'));
+                    if (navDots[index]) {
+                        navDots[index].classList.add('active');
+                    }
+                }
+            });
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Starfield Animation
+        window.onload = function() {
+            const canvas = document.getElementById("starfield");
+            const ctx = canvas.getContext("2d");
+            let stars = [];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                // Reinitialize stars when canvas is resized
+                initializeStars();
+            }
+            
+            resizeCanvas();
+            window.addEventListener("resize", resizeCanvas);
+
+            function createStar() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    speed: Math.random() * 0.5 + 0.1,
+                    opacity: Math.random() * 0.8 + 0.2
+                };
+            }
+
+            function initializeStars() {
+                stars = [];
+                const starCount = Math.floor((canvas.width * canvas.height) / 8000);
+                for (let i = 0; i < starCount; i++) {
+                    stars.push(createStar());
+                }
+            }
+
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                for (let i = 0; i < stars.length; i++) {
+                    const star = stars[i];
+                    star.y += star.speed;
+                    
+                    if (star.y > canvas.height) {
+                        stars[i] = createStar();
+                        stars[i].y = -5;
+                    }
+                    
+                    ctx.globalAlpha = star.opacity;
+                    ctx.fillStyle = "#ffffff";
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                ctx.globalAlpha = 1.0;
+            }
+
+            setInterval(update, 1000 / 60); // 60 FPS
+        };
+    </script>
+</body>
+</html>
